@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://integ.com/integration/services/contracts/common"
+    xmlns="http://integ.com/integration/services/contracts/common"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           jaxb:version="2.1">
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:globalBindings localScoping="toplevel">
+                <jaxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
+                               parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime"
+                               printMethod="javax.xml.bind.DatatypeConverter.printDateTime"/>
+                <jaxb:javaType name="java.util.Calendar" xmlType="xs:date"
+                               parseMethod="javax.xml.bind.DatatypeConverter.parseDate"
+                               printMethod="javax.xml.bind.DatatypeConverter.printDate"/>
+                <jaxb:javaType name="java.util.Calendar" xmlType="xs:time"
+                               parseMethod="javax.xml.bind.DatatypeConverter.parseTime"
+                               printMethod="javax.xml.bind.DatatypeConverter.printTime"/>
+            </jaxb:globalBindings>
+        </xs:appinfo>
+    </xs:annotation>
+
+    <xs:complexType name="faultDetails">
+        <xs:sequence>
+            <xs:element name="error" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="key" minOccurs="1" maxOccurs="1" type="xs:string"/>
+                        <xs:element name="code" minOccurs="1" maxOccurs="1" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="message" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="text"/>
+                        <xs:element name="lang"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="hint" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RD">
+        <xs:sequence>
+            <xs:element name="code" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="desc" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="lang" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

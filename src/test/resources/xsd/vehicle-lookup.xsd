@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           jaxb:extensionBindingPrefixes="annox"
+           jaxb:version="2.0"
+           xmlns:annox="http://annox.dev.java.net"
+           xmlns:common="http://integ.com/integration/services/contracts/common"
+           targetNamespace="http://integ.com/integration/services/vehicle/api"
+           xmlns="http://integ.com/integration/services/vehicle/api">
+
+    <xs:import schemaLocation="contracts-common.xsd" namespace="http://integ.com/integration/services/contracts/common"/>
+
+    <xs:complexType name="AbstractVehicleLookupRequest" abstract="true">
+    </xs:complexType>
+    <xs:complexType name="AbstractVehicleLookupResponse" abstract="true">
+    </xs:complexType>
+
+    <xs:complexType name="FaultResponse">
+        <xs:complexContent>
+            <xs:extension base="AbstractVehicleLookupResponse">
+                <xs:sequence>
+                    <xs:element name="faultDetails" minOccurs="0" type="common:faultDetails"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VehicleLookupRequest">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:appinfo>
+                    <annox:annotate target="field">
+                        @com.integ.integration.services.contracts.common.rest.Request
+                    </annox:annotate>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="AbstractVehicleLookupRequest">
+                    <xs:sequence>
+                        <xs:choice>
+                            <xs:element name="vrm" type="xs:string"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="VehicleLookupResponse">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:appinfo>
+                    <annox:annotate target="field">
+                        @com.integ.integration.services.contracts.common.rest.ResponseCode(value = javax.ws.rs.core.Response.Status.OK)
+                    </annox:annotate>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="AbstractVehicleLookupResponse">
+                    <xs:sequence>
+                        <xs:element name="vehicleInfo" minOccurs="0" maxOccurs="1" type="Vehicle"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="VehicleNotFoundFailure">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:appinfo>
+                    <annox:annotate target="field">
+                        @com.integ.integration.services.contracts.common.rest.ResponseCode(value = javax.ws.rs.core.Response.Status.NOT_FOUND)
+                    </annox:annotate>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="FaultResponse"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="VRMInvalidFailure">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:appinfo>
+                    <annox:annotate target="field">
+                        @com.integ.integration.services.contracts.common.rest.ResponseCode(value = javax.ws.rs.core.Response.Status.BAD_REQUEST)
+                    </annox:annotate>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="FaultResponse"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="Vehicle">
+        <xs:sequence>
+            <xs:element name="ABICode" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="BodyType" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD">
+                <!--<xs:annotation>
+                    <xs:appinfo>
+                        <annox:annotate target="field">
+                            @com.integ.services.external.systems.mappings.api.RefDataMappingAware(refDataType="VEHICLE_BODY_TYPE")
+                        </annox:annotate>
+                    </xs:appinfo>
+                </xs:annotation>-->
+            </xs:element>
+            <xs:element name="CubicCapacity" minOccurs="0" maxOccurs="1" nillable="false" type="xs:int"/>
+            <xs:element name="FuelType" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD">
+                <!-- <xs:annotation>
+                     <xs:appinfo>
+                         <annox:annotate target="field">
+                             @com.integ.services.external.systems.mappings.api.RefDataMappingAware(refDataType="VEHICLE_FUEL_TYPE")
+                         </annox:annotate>
+                     </xs:appinfo>
+                 </xs:annotation>-->
+            </xs:element>
+            <xs:element name="Make" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD"/>
+            <xs:element name="Model" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD"/>
+            <xs:element name="Year" minOccurs="0" maxOccurs="1" nillable="false" type="xs:int"/>
+            <xs:element name="NumberOfDoors" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="RegistrationDate" minOccurs="0" maxOccurs="1" nillable="false" type="xs:date"/>
+            <xs:element name="RegistrationDates" minOccurs="0" maxOccurs="unbounded" nillable="false" type="xs:date"/>
+            <xs:element name="NumberOfSeats" minOccurs="0" maxOccurs="unbounded" nillable="false" type="xs:string"/>
+            <xs:element name="RegistrationNumber" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="Transmission" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD">
+                <!--  <xs:annotation>
+                      <xs:appinfo>
+                          <annox:annotate target="field">
+                              @com.integ.services.external.systems.mappings.api.RefDataMappingAware(refDataType="VEHICLE_TRANSMISSION")
+                          </annox:annotate>
+                      </xs:appinfo>
+                  </xs:annotation>-->
+            </xs:element>
+            <xs:element name="Value" minOccurs="0" maxOccurs="1" nillable="false" type="xs:decimal"/>
+            <xs:element name="VehicleLeftRightDrive" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD"/>
+            <xs:element name="GrossWeight" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="VehicleIdentificationNumber" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="PowerWeightRatio" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="VehicleType" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD">
+                <!-- <xs:annotation>
+                     <xs:appinfo>
+                         <annox:annotate target="field">
+                             @com.integ.services.external.systems.mappings.api.RefDataMappingAware(refDataType="VEHICLE_TYPE")
+                         </annox:annotate>
+                     </xs:appinfo>
+                 </xs:annotation>-->
+            </xs:element>
+            <xs:element name="EngineType" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD">
+                <!--  <xs:annotation>
+                      <xs:appinfo>
+                          <annox:annotate target="field">
+                              @com.integ.services.external.systems.mappings.api.RefDataMappingAware(refDataType="VEHICLE_ENGINE_TYPE")
+                          </annox:annotate>
+                      </xs:appinfo>
+                  </xs:annotation>-->
+            </xs:element>
+            <xs:element name="Color" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD"/>
+            <xs:element name="InsuranceGroup" minOccurs="0" maxOccurs="1" nillable="false" type="common:RD"/>
+            <xs:element name="Mileage" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+            <xs:element name="EngineSize" minOccurs="0" maxOccurs="1" nillable="false" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
